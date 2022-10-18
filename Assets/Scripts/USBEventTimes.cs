@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class USBEventTimes : TestingMode
 {
-
-
     public override string ModeName()
     {
         return "Minimum Input timestamp difference";
@@ -15,6 +13,4 @@ public class USBEventTimes : TestingMode
     {
         base.OnGUI();
     }
-
-   
 }
