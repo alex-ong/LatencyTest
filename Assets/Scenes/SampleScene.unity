@@ -239,6 +239,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21044a465dd0427d9e498d796b92aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &368818599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 368818600}
+  - component: {fileID: 368818601}
+  m_Layer: 0
+  m_Name: RawInputDaemon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &368818600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368818599}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &368818601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368818599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a0cf86bd2f5020478fb662fb979e1a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &473923460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1148,6 +1191,7 @@ MonoBehaviour:
   lastKeyboardInputString: 
   startCode: 330
   endCode: 349
+  RateCheckType: 1
 --- !u!114 &1619107001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1397,6 +1441,7 @@ MonoBehaviour:
   lastKeyboardInputString: 
   startCode: 97
   endCode: 122
+  RateCheckType: 0
 --- !u!114 &1972698491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1562,20 +1607,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'This mode shows you the minimum
-
-    timestamp difference between key events.
-
-    Spam the keyboard and joystick.
-
-    The Polling rate based on the minimum time between two events.
-
-
-    Note that this is different to the USB polling rate. For example, your "gaming
-    keyboard" could USB poll at 1000hz but only report events every 5 milliseconds.
-
-
-    The accuracy of this test is limited to GamePolling rate.'
+  m_Text: "This mode shows you the minimum\r\ntimestamp difference between key events.\r\nSpam
+    the keyboard and joystick.\r\nThe Polling rate based on the minimum time between
+    two events.\r\n\r\nNote that this is different to the USB polling rate. For example,
+    your \"gaming keyboard\" could USB poll at 1000hz but only report events every
+    5 milliseconds.\r\nKeyboard: The accuracy is limited to RawInput, so framerate
+    doesn't matter.\r\nJoystick: The accuracy of this test is limited to GamePolling
+    rate."
 --- !u!222 &2133337085
 CanvasRenderer:
   m_ObjectHideFlags: 0

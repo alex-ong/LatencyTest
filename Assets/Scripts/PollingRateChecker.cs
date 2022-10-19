@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityRawInput;
 
 public class PollingRateChecker : MonoBehaviour
 {
@@ -10,13 +11,75 @@ public class PollingRateChecker : MonoBehaviour
     public KeyCode startCode;
     public KeyCode endCode;
 
+    private enum CheckType
+    {
+        RAW_INPUT,
+        UNITY,
+        ONGUI
+    }
+
+    [SerializeField]
+    private CheckType RateCheckType = CheckType.UNITY;
+
+    void Start()
+    {
+        if (RateCheckType == CheckType.RAW_INPUT)
+        {
+            RawInput.OnKeyDown += RawInput_OnKeyDown;
+            RawInput.OnKeyUp += RawInput_OnKeyDown;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (RateCheckType == CheckType.RAW_INPUT)
+        {
+            RawInput.OnKeyDown -= RawInput_OnKeyDown;
+        }
+    }
+
+    /// <summary>
+    /// Converts rawkey to keycode. Only works for rk in range A-Z
+    /// </summary>
+    /// <param name="rk"></param>
+    /// <returns></returns>
+    protected bool RawKeyToKeyCode(RawKey rk, out KeyCode result)
+    {
+        if (RawKey.A <= rk && rk <= RawKey.Z)
+        {
+            result = (rk - RawKey.A) + KeyCode.A;
+            return true;
+        }
+        result = KeyCode.None;
+        return false;
+    }
+
+    private void RawInput_OnKeyDown(RawKey rk)
+    {
+        KeyCode kc;
+        var currentTime = Time.realtimeSinceStartup;
+        if (RawKeyToKeyCode(rk, out kc) && ValidCode(kc))
+        {
+            float minTime = currentTime - lastKeyboardInput;
+            if (minimumTime.HasValue && minTime < minimumTime.Value || !minimumTime.HasValue)
+            {
+                minimumTime = minTime;
+                this.lastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
+            }
+            lastKeyboardInput = currentTime;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        bool keyDetected = ProcessNativeUnityInput();
-        if (keyDetected)
+        if (RateCheckType != CheckType.RAW_INPUT)
         {
-            lastKeyboardInput = Time.unscaledTime;
+            bool keyDetected = ProcessNativeUnityInput();
+            if (keyDetected)
+            {
+                lastKeyboardInput = Time.realtimeSinceStartup;
+            }
         }
     }
 
@@ -57,7 +120,7 @@ public class PollingRateChecker : MonoBehaviour
         {
             if (Input.GetKeyDown((KeyCode)i))
             {
-                float minTime = Time.unscaledTime - lastKeyboardInput;
+                float minTime = Time.realtimeSinceStartup - lastKeyboardInput;
                 keyDetected = true;
                 if (minimumTime.HasValue && minTime < minimumTime.Value || !minimumTime.HasValue)
                 {
