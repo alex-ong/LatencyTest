@@ -2,11 +2,16 @@
 
 public class PollingRateChecker : MonoBehaviour
 {
-    public float lastKeyboardInput = 0.0f;
-    public float? minimumTime = null;
-    public string lastKeyboardInputString = "";
-    public KeyCode startCode;
-    public KeyCode endCode;
+    private float lastKeyboardInput = 0.0f;
+    private float? minimumTime = null;
+
+    public string LastKeyboardInputString { get; private set; } = "";
+
+    [SerializeField]
+    private KeyCode startCode;
+
+    [SerializeField]
+    private KeyCode endCode;
 
     private enum CheckType
     {
@@ -69,7 +74,7 @@ public class PollingRateChecker : MonoBehaviour
             if (minimumTime.HasValue && minTime < minimumTime.Value || !minimumTime.HasValue)
             {
                 minimumTime = minTime;
-                this.lastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
+                this.LastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
             }
             lastKeyboardInput = currentTime;
         }
@@ -108,7 +113,7 @@ public class PollingRateChecker : MonoBehaviour
                 if (minimumTime.HasValue && minTime < minimumTime.Value || !minimumTime.HasValue)
                 {
                     minimumTime = minTime;
-                    this.lastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
+                    this.LastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
                 }
             }
         }
@@ -131,7 +136,7 @@ public class PollingRateChecker : MonoBehaviour
                 if (minimumTime.HasValue && minTime < minimumTime.Value || !minimumTime.HasValue)
                 {
                     minimumTime = minTime;
-                    this.lastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
+                    this.LastKeyboardInputString = (minimumTime * 1000).ToString() + " ms";
                 }
                 break;
             }

@@ -12,7 +12,6 @@ public class OSTextBox : MonoBehaviour
     [Multiline]
     string _baseText = null;
 
-#pragma warning disable CS0414
     [Multiline]
     [SerializeField]
     string _windowsText = null;
@@ -20,17 +19,22 @@ public class OSTextBox : MonoBehaviour
     [Multiline]
     [SerializeField]
     string _nonWindowsText = null;
-#pragma warning restore CS0414
 
     // Start is called before the first frame update
     void Start()
     {
         string finalText = _baseText;
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-        finalText += "\n\n" + _windowsText;
-#else
-        finalText += "\n\n" + _nonWindowsText;
-#endif
+        if (
+            Application.platform == RuntimePlatform.WindowsPlayer
+            || Application.platform == RuntimePlatform.WindowsEditor
+        )
+        {
+            finalText += "\n\n" + _windowsText;
+        }
+        else
+        {
+            finalText += "\n\n" + _nonWindowsText;
+        }
         _text.text = finalText;
     }
 }
