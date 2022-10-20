@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityRawInput;
+﻿using UnityEngine;
 
 public class PollingRateChecker : MonoBehaviour
 {
@@ -23,18 +20,26 @@ public class PollingRateChecker : MonoBehaviour
 
     void Start()
     {
+#if !(UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
+        if (RateCheckType == CheckType.RAW_INPUT)
+            RateCheckType = CheckType.UNITY;
+#endif
+
+#if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
         if (RateCheckType == CheckType.RAW_INPUT)
         {
-            RawInput.OnKeyDown += RawInput_OnKeyDown;
-            RawInput.OnKeyUp += RawInput_OnKeyDown;
+            UnityRawInput.RawInput.OnKeyDown += RawInput_OnKeyDown;
+            UnityRawInput.RawInput.OnKeyUp += RawInput_OnKeyDown;
         }
+#endif
     }
 
+#if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
     void OnDisable()
     {
         if (RateCheckType == CheckType.RAW_INPUT)
         {
-            RawInput.OnKeyDown -= RawInput_OnKeyDown;
+            UnityRawInput.RawInput.OnKeyDown -= RawInput_OnKeyDown;
         }
     }
 
@@ -43,18 +48,18 @@ public class PollingRateChecker : MonoBehaviour
     /// </summary>
     /// <param name="rk"></param>
     /// <returns></returns>
-    protected bool RawKeyToKeyCode(RawKey rk, out KeyCode result)
+    protected bool RawKeyToKeyCode(UnityRawInput.RawKey rk, out KeyCode result)
     {
-        if (RawKey.A <= rk && rk <= RawKey.Z)
+        if (UnityRawInput.RawKey.A <= rk && rk <= UnityRawInput.RawKey.Z)
         {
-            result = (rk - RawKey.A) + KeyCode.A;
+            result = (rk - UnityRawInput.RawKey.A) + KeyCode.A;
             return true;
         }
         result = KeyCode.None;
         return false;
     }
 
-    private void RawInput_OnKeyDown(RawKey rk)
+    private void RawInput_OnKeyDown(UnityRawInput.RawKey rk)
     {
         KeyCode kc;
         var currentTime = Time.realtimeSinceStartup;
@@ -69,6 +74,7 @@ public class PollingRateChecker : MonoBehaviour
             lastKeyboardInput = currentTime;
         }
     }
+#endif
 
     // Update is called once per frame
     void Update()
